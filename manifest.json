@@ -2,8 +2,8 @@
   "manifest_version": 2,
 
   "name": "Simple Dic",
-  "description": "This extension demonstrates a 'browser action' with kittens.",
-  "version": "0.1",
+  "description": "Simple dic is a dictionary chrome extension for easy to check words on a web page",
+  "version": "0.12",
   "options_page": "options.html",
   "background":{
     "scripts":["./js/background.js"]

@@ -1,0 +1,29 @@
+{
+  "manifest_version": 2,
+
+  "name": "Simple Dic",
+  "description": "This extension demonstrates a 'browser action' with kittens.",
+  "version": "0.1",
+  "options_page": "options.html",
+  "background":{
+    "scripts":["./js/background.js"]
+  },
+  "icons": {
+    "32":  "./icon/icon-32.png", 
+    "128": "./icon/icon-128.png"
+  },  
+  "browser_action": {
+    "default_icon": "./icon/icon-32.png",
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*"],
+      "js": ["./js/lib.js", "./js/content.js"]
+    }
+  ],  
+  "permissions": [
+    "http://*/*",
+    "storage"
+  ]
+}

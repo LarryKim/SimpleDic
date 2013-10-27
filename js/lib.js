@@ -4,7 +4,7 @@ function $id(id) {
   return document.getElementById(id);
 }
 
-var Lib = (function () {
+var SdLib = (function () {
   var _domready, _getData, _setData, _getConf, _getWord, _domready;
 
   _getData = function (opt, key, callback) {
@@ -43,8 +43,6 @@ var Lib = (function () {
   },
   _getWord = function (callback) {
     _getData("local", "_sd_word", function (data) {
-      console.log("-----");
-      console.log(data);
       if(typeof data === "undefined" || typeof data.lastWord === "undefined") {
         callback("");
       }

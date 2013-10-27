@@ -1,6 +1,6 @@
 "use strict";
 
-var Lib = Lib || {},
+var SdLib = SdLib || {},
 save_options = function () {
   var dicUrl = $id("dicUrl").value;
   var frameWidth = $id("frameWidth").value;  
@@ -11,7 +11,7 @@ save_options = function () {
     frameWidth: frameWidth,
     frameHeight: frameHeight
   }; 
-  Lib.setData("sync", "_sd_conf", obj, null); 
+  SdLib.setData("sync", "_sd_conf", obj, null); 
   // Update status to let user know options were saved.
   var status = $id("status");
   status.innerHTML = "Options Saved :)";
@@ -21,7 +21,7 @@ save_options = function () {
 },
 restore_options = function () {
   // get configuration data
-  Lib.getConf(function (cfg) {
+  SdLib.getConf(function (cfg) {
     var dicUrl = cfg.dicUrl,
     frmWidth = cfg.frameWidth,  
     frmHeight = cfg.frameHeight;
@@ -32,5 +32,5 @@ restore_options = function () {
   });
 };
 
-Lib.domready(restore_options);
+SdLib.domready(restore_options);
 $id('save').addEventListener('click', save_options);

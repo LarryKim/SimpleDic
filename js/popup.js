@@ -1,21 +1,21 @@
 "use strict";
 
-var Lib = Lib || {},
+var SdLib = SdLib || {},
 loadDic = function () {
-  Lib.getConf(function (cfg) {
+  SdLib.getConf(function (cfg) {
     var dicUrl = cfg.dicUrl,
     frmWidth = cfg.frameWidth,  
     frmHeight = cfg.frameHeight;
 
-    Lib.getWord(function(word) {
+    SdLib.getWord(function(word) {
       var frm;
       
       frm = $id('frm');
-      frm.src = dicUrl.replace(/\$q$/, encodeURI(word));
+      frm.src = dicUrl.replace(/\$q/g, encodeURI(word));
       frm.style.width = frmWidth + "px";
       frm.style.height = frmHeight + "px";   
     });
   });
 };
 
-Lib.domready(loadDic);
+SdLib.domready(loadDic);

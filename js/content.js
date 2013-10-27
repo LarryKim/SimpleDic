@@ -1,8 +1,9 @@
 "use strict";
 
 // global variable
-var frm = null,
-Lib = Lib || {},
+var _sd_frm = null,
+_sd_word_flag = null,
+SdLib = SdLib || {},
 _sdCaptureWord = function () {
   var sel, node, range, word = "";
   sel = window.getSelection();
@@ -33,7 +34,9 @@ _sdCaptureWord = function () {
     }
 
     if(word != "") {
-      word = word.replace(/[.,'"]$/, '');
+      // filter non alphabet chars
+      word = word.replace(/([a-zA-Z\-]{3})[^a-zA-Z\-].+$/g, '$1');
+      word = word.replace(/[^a-zA-Z\-]/g, '').toLowerCase();
       
       // save the last search word in the local storage. 
       var obj = {};
@@ -47,38 +50,59 @@ _sdCaptureWord = function () {
   return word;
 };
 
-Lib.getConf(function (cfg) {
+SdLib.getConf(function (cfg) {
   var dicUrl = cfg.dicUrl,
   frmWidth = cfg.frameWidth,  
   frmHeight = cfg.frameHeight;
 
   document.addEventListener("click", function(evt) {
-    var word="";
+    var word="",
+    markTxt;
 
     if(evt.ctrlKey == true) {
       word = _sdCaptureWord();
       if(word != "") {
-        if(frm == null) {
-          frm = document.createElement("iframe");
-          document.body.appendChild(frm);
-          
-          frm.style.width = frmWidth + "px";
-          frm.style.height = frmHeight + "px";
-          frm.style.position = "absolute";
-          frm.style.overflow = "hidden";
-          frm.style.zIndex = "99999";
-          frm.style.border = "1px solid black";
-          frm.style.backgroundColor = "#fff";
+        if(_sd_frm == null) {
+          _sd_frm = document.createElement("iframe");
+          _sd_frm.style.width = frmWidth + "px";
+          _sd_frm.style.height = frmHeight + "px";
+          _sd_frm.style.position = "absolute";
+          _sd_frm.style.overflow = "hidden";
+          _sd_frm.style.zIndex = "99999";
+          _sd_frm.style.border = "1px solid black";
+          _sd_frm.style.backgroundColor = "#fff";
+
+          document.body.appendChild(_sd_frm);
         }
-        frm.src = dicUrl.replace(/\$q$/, encodeURI(word));
-        frm.style.top = window.pageYOffset + window.innerHeight/2 - frmHeight/2 + "px";
-        frm.style.right = "10px";
+        _sd_frm.src = dicUrl.replace(/\$q/g, encodeURI(word));
+        _sd_frm.style.top = window.pageYOffset + window.innerHeight/2 - frmHeight/2 + "px";
+        _sd_frm.style.right = "10px";
+      
+        // show word flag
+        if(_sd_word_flag == null) {
+          _sd_word_flag = document.createElement("div");
+          _sd_word_flag.style.position = "absolute";
+          _sd_word_flag.style.color = "rgba(255, 255, 0, 0.9)";
+          _sd_word_flag.style.textShadow = "rgba(73, 71, 3, 0.9) 0px 2px 3px"; 
+          _sd_word_flag.style.fontSize = "11px";
+          markTxt = document.createTextNode('✔');
+          _sd_word_flag.appendChild(markTxt);
+          document.body.appendChild(_sd_word_flag);
+        } 
+        _sd_word_flag.style.top = window.pageYOffset + evt.clientY + "px";
+        _sd_word_flag.style.left= window.pageXOffset + evt.clientX + "px";
+
       }
     }
     else {
-      if(frm != null) {
-        document.body.removeChild(frm);
-        frm = null;
+      if(_sd_frm != null) {
+        document.body.removeChild(_sd_frm);
+        _sd_frm = null;
+      }
+
+      if(_sd_word_flag != null) {
+        document.body.removeChild(_sd_word_flag);
+        _sd_word_flag = null;
       }
     }
   }, false);

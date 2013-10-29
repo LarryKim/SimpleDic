@@ -30,7 +30,7 @@ var SdLib = (function () {
       var config;
       if(typeof data === "undefined" || typeof data.dicUrl === "undefined") {
           config = {
-            dicUrl : "http://small.dic.daum.net/search.do?dic=eng&q=$q",
+            dicUrl : "http://dictionary.cambridge.org/dictionary/american-english/$q?q=$q",
             frameWidth: "411",
             frameHeight: "530"
           };

@@ -5,7 +5,8 @@ var _sd_frm = null,
 _sd_word_flag = null,
 SdLib = SdLib || {},
 _sdCaptureWord = function () {
-  var sel, node, range, word = "";
+  var sel, node, range, word = "", spChars;
+
   sel = window.getSelection();
   node = sel.anchorNode;
 
@@ -33,11 +34,15 @@ _sdCaptureWord = function () {
       word = range.toString().trim();
     }
 
+    // filter useless chars
+    //word = word.replace(/([a-zA-Z\-]{3})[^a-zA-Z\-].+$/g, '$1');
+    //word = word.replace(/[^a-zA-Z\-]/g, '').toLowerCase();
+    var spChars = "\\" + "\"',.()[]{}<>;:?!".split("").join("\\");
+    //word = word.replace(new RegExp('^.+[' + spChars + ']([^' + spChars + ']{3})'), '$1');
+    word = word.replace(new RegExp('([^' + spChars + ']{3})[' + spChars + '].+$'), '$1');
+    word = word.replace(new RegExp('[' + spChars + ']', 'g'), '').toLowerCase();
+    
     if(word != "") {
-      // filter non alphabet chars
-      word = word.replace(/([a-zA-Z\-]{3})[^a-zA-Z\-].+$/g, '$1');
-      word = word.replace(/[^a-zA-Z\-]/g, '').toLowerCase();
-      
       // save the last search word in the local storage. 
       var obj = {};
       obj["_sd_word"] = {
@@ -59,7 +64,8 @@ SdLib.getConf(function (cfg) {
     var word="",
     markTxt;
 
-    if(evt.ctrlKey == true) {
+    // ctrl + mouse left click or double click
+    if(evt.button == 0 && (evt.ctrlKey == true ||  evt.detail == 2)) {
       word = _sdCaptureWord();
       if(word != "") {
         if(_sd_frm == null) {
